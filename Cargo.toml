@@ -16,7 +16,7 @@ all-features = true
 syzlang-parser = { version = "0.1" }
 anyhow = "1"
 serde_json = "1"
-nix = { version = "*", features = ["fs"] }
+nix = { version = "0.27.1", features = ["fs"] }
 
 # Used to create files in target directory which contains the data
 scratch = "1"
