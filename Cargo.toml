@@ -1,0 +1,38 @@
+[package]
+name = "syzlang-data"
+version = "0.1.0"
+edition = "2021"
+license-file = "LICENSE"
+description = "Syzlang data already parsed"
+readme = "README.md"
+homepage = "https://github.com/rstenvi/syzlang-data"
+repository = "https://github.com/rstenvi/syzlang-data"
+keywords = ["syzlang", "syzkaller", "syscall"]
+
+[package.metadata."docs.rs"]
+all-features = true
+
+[build-dependencies]
+syzlang-parser = { version = "0.1.0", git = "https://github.com/rstenvi/syzlang-parser" }
+anyhow = "1"
+serde_json = "1"
+
+# Used to create files in target directory which contains the data
+scratch = "1"
+
+[dependencies]
+lazy_static = "1.4"
+serde_json = "1"
+syzlang-parser = { version = "0.1.0", git = "https://github.com/rstenvi/syzlang-parser" }
+
+[features]
+std = []
+akaros = []
+darwin = []
+freebsd = []
+fuchsia = []
+linux = []
+netbsd = []
+openbsd = []
+trusty = []
+windows = []
