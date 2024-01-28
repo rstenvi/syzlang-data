@@ -9,3 +9,9 @@ Each supported OS is a different feature, so build with:
 ~~~
 cargo build --features=linux
 ~~~
+
+## Test
+
+~~~
+cargo test --all-features
+~~~

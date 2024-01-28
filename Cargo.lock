@@ -132,8 +132,9 @@ dependencies = [
 
 [[package]]
 name = "syzlang-parser"
-version = "0.1.0"
-source = "git+https://github.com/rstenvi/syzlang-parser#05501c18e9c70c2f6d1a0bdbdb31fd929f6cbf3d"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3c7c99b6f3fc443d22c1cce5de830ba22cc5aedab480ae8b63ba226c37900443"
 dependencies = [
  "bytebuffer",
  "glob",

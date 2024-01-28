@@ -13,7 +13,7 @@ keywords = ["syzlang", "syzkaller", "syscall"]
 all-features = true
 
 [build-dependencies]
-syzlang-parser = { version = "0.1.0", git = "https://github.com/rstenvi/syzlang-parser" }
+syzlang-parser = { version = "0.1" }
 anyhow = "1"
 serde_json = "1"
 
@@ -23,7 +23,7 @@ scratch = "1"
 [dependencies]
 lazy_static = "1.4"
 serde_json = "1"
-syzlang-parser = { version = "0.1.0", git = "https://github.com/rstenvi/syzlang-parser" }
+syzlang-parser = { version = "0.1" }
 
 [features]
 std = []
