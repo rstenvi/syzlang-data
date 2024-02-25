@@ -133,9 +133,8 @@ fn download_syzkaller(skdir: &PathBuf, max: usize) {
 		println!("c1.5 {c:?}");
 		if !c.status.success() {
 			if max > 0 {
-				std::fs::remove_dir_all(skdir)
-					.expect("Unable to remove syzkaller directory");
-				download_syzkaller(skdir, max-1)
+				std::fs::remove_dir_all(skdir).expect("Unable to remove syzkaller directory");
+				download_syzkaller(skdir, max - 1)
 			} else {
 				panic!("unable to download Syzkaller");
 			}
