@@ -108,6 +108,41 @@ pub mod {os} {{
 	Ok(())
 }
 
+fn download_syzkaller(skdir: &PathBuf, max: usize) {
+	if !skdir.exists() {
+		println!("Directory does not exist, downloading");
+		let c = Command::new("git")
+			.arg("clone")
+			.arg("--quiet")
+			.arg("--branch")
+			.arg("master")
+			.arg("https://github.com/google/syzkaller.git")
+			.arg(skdir)
+			.output()
+			.expect("Unable to download syzkaller from git");
+		println!("c1 {c:?}");
+		assert!(c.stderr == b"");
+	} else {
+		let c = Command::new("git")
+			.arg("-C")
+			.arg(skdir)
+			.arg("checkout")
+			.arg("master")
+			.output()
+			.expect("unable to checkout master");
+		println!("c1.5 {c:?}");
+		if !c.status.success() {
+			if max > 0 {
+				std::fs::remove_dir_all(skdir)
+					.expect("Unable to remove syzkaller directory");
+				download_syzkaller(skdir, max-1)
+			} else {
+				panic!("unable to download Syzkaller");
+			}
+		}
+	}
+}
+
 fn main() -> Result<()> {
 	println!("Build started");
 	let out_dir = env::var_os("OUT_DIR").unwrap();
@@ -132,6 +167,7 @@ fn main() -> Result<()> {
 		lock.push("build.lock");
 		let lock = std::fs::OpenOptions::new()
 			.create(true)
+			.truncate(true)
 			.write(true)
 			.open(lock)
 			.unwrap();
@@ -140,30 +176,8 @@ fn main() -> Result<()> {
 
 		skdir.push("syzkaller");
 		println!("output will be in {skdir:?}");
-		if !skdir.exists() {
-			println!("Directory does not exist, downloading");
-			let c = Command::new("git")
-				.arg("clone")
-				.arg("--quiet")
-				.arg("--branch")
-				.arg("master")
-				.arg("https://github.com/google/syzkaller.git")
-				.arg(&skdir)
-				.output()
-				.expect("Unable to download syzkaller from git");
-			println!("c1 {c:?}");
-			assert!(c.stderr == b"");
-		} else {
-			let c = Command::new("git")
-				.arg("-C")
-				.arg(&skdir)
-				.arg("checkout")
-				.arg("master")
-				.output()
-				.expect("unable to checkout master");
-			println!("c1.5 {c:?}");
-			assert!(c.status.success());
-		}
+		download_syzkaller(&skdir, 1);
+
 		println!("pulling newest version of Syzkaller");
 		let c = Command::new("git")
 			.arg("-C")
