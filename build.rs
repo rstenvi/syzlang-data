@@ -1,5 +1,6 @@
 use anyhow::Result;
-use std::os::fd::AsRawFd;
+use nix::fcntl::Flock;
+use std::fs::File;
 use std::path::PathBuf;
 use std::process::Command;
 use std::{env, path::Path};
@@ -142,6 +143,21 @@ fn download_syzkaller(skdir: &PathBuf, max: usize) {
 	}
 }
 
+fn acquire_lock(scratch: &Path) -> anyhow::Result<Flock<File>> {
+	let mut lock = PathBuf::from(scratch);
+	lock.push("build.lock");
+	let lock = std::fs::OpenOptions::new()
+		.create(true)
+		.truncate(true)
+		.write(true)
+		.open(lock)
+		.unwrap();
+	let lock = nix::fcntl::Flock::lock(lock, nix::fcntl::FlockArg::LockExclusive)
+		.expect("Unable to acquire lock");
+	Ok(lock)
+}
+
+
 fn main() -> Result<()> {
 	println!("Build started");
 	let out_dir = env::var_os("OUT_DIR").unwrap();
@@ -162,16 +178,8 @@ fn main() -> Result<()> {
 	} else {
 		// Get a lock so that multiple build.rs processes don't interfere with
 		// eachother
-		let mut lock = skdir.clone();
-		lock.push("build.lock");
-		let lock = std::fs::OpenOptions::new()
-			.create(true)
-			.truncate(true)
-			.write(true)
-			.open(lock)
-			.unwrap();
-		let fd = lock.as_raw_fd();
-		nix::fcntl::flock(fd, nix::fcntl::FlockArg::LockExclusive).unwrap();
+		let lock = skdir.clone();
+		let lock = acquire_lock(&lock)?;
 
 		skdir.push("syzkaller");
 		println!("output will be in {skdir:?}");
@@ -234,7 +242,7 @@ fn main() -> Result<()> {
 			println!("Hashes matches, aborting fresh build");
 		}
 
-		drop(lock);
+		lock.unlock().expect("unable to unlock lock");
 		println!("Lock unlocked");
 	}
 

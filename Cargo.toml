@@ -10,10 +10,12 @@ repository = "https://github.com/rstenvi/syzlang-data"
 keywords = ["syzlang", "syzkaller", "syscall"]
 
 [build-dependencies]
-syzlang-parser = { version = "0.1" }
+# syzlang-parser = { version = "0.1" }
+# syzlang-parser = { path = "../syzlang-parser" }
+syzlang-parser = { git = "https://github.com/rstenvi/syzlang-parser" }
 anyhow = "1"
 serde_json = "1"
-nix = { version = "0.27.1", features = ["fs"] }
+nix = { version = "0.28", features = ["fs"] }
 
 # Used to create files in target directory which contains the data
 scratch = "1"
@@ -21,7 +23,9 @@ scratch = "1"
 [dependencies]
 lazy_static = "1.4"
 serde_json = "1"
-syzlang-parser = { version = "0.1" }
+# syzlang-parser = { version = "0.1" }
+# syzlang-parser = { path = "../syzlang-parser" }
+syzlang-parser = { git = "https://github.com/rstenvi/syzlang-parser" }
 
 [features]
 std = []
