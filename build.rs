@@ -157,7 +157,6 @@ fn acquire_lock(scratch: &Path) -> anyhow::Result<Flock<File>> {
 	Ok(lock)
 }
 
-
 fn main() -> Result<()> {
 	println!("Build started");
 	let out_dir = env::var_os("OUT_DIR").unwrap();
