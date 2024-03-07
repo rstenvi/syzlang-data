@@ -1,6 +1,6 @@
 [package]
 name = "syzlang-data"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 license-file = "LICENSE"
 description = "Syzlang data already parsed"
@@ -18,7 +18,7 @@ serde_json = "1"
 nix = { version = "0.28", features = ["fs"] }
 
 # Used to create files in target directory which contains the data
-scratch = "1"
+# scratch = "1"
 
 [dependencies]
 lazy_static = "1.4"
