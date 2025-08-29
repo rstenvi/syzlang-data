@@ -1,5 +1,8 @@
 {
 	"rust-analyzer.showUnlinkedFileNotification": false,
-	"rust-analyzer.checkOnSave.command": "clippy",
-	"rust-analyzer.cargo.features": []
+	"rust-analyzer.check.command": "clippy",
+	"rust-analyzer.cargo.features": [
+		"linux"
+	],
+	"rust-analyzer.checkOnSave": true
 }
